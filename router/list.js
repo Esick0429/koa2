@@ -10,9 +10,9 @@ exports.mylist = async (ctx) =>{
         let sqlLang = `select * from adminw`;
         db.query(sqlLang, (err, data)=>{
             if(err) reject(err);
-            data.map(val => {
-                val.time = '北京时间'+val.time;
-            })
+            // data.map(val => {
+            //     val.time = '北京时间'+val.time;
+            // })
             resolve(data);	// 返回拿到的数据
         })
     })
@@ -24,11 +24,13 @@ exports.wtf = async (ctx) =>{
     let id = ctx.request.body.id;
     let name = ctx.request.body.name;
     let time = ctx.request.body.time
-    let json = [id,name,time]
+    
+    let json = [id,name,time[0],time[1]]
+    console.log(json)
     let data = await new Promise((resolve, reject)=>{
         let sqlLang = 'select * from adminw where 1=1 ' ;
         if(id!='' || name!='' || time!=''){
-            sqlLang = sqlLang + ' and id = ? or name = ? or time = ?'
+            sqlLang = sqlLang + ' and id = ? or name = ? or (time between ? and ?)'
         }
         db.query(sqlLang,json,(err, data)=>{
             if(err) reject(err);
