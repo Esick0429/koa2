@@ -1,30 +1,10 @@
 const db = require('../db');
 
-
-exports.music = async (ctx) =>{
-    ctx.body = "列表-音乐"
-}
-
-exports.mylist = async (ctx) =>{
-    let data = await new Promise((resolve, reject)=>{
-        let sqlLang = `select * from adminw`;
-        db.query(sqlLang, (err, data)=>{
-            if(err) reject(err);
-            // data.map(val => {
-            //     val.time = '北京时间'+val.time;
-            // })
-            resolve(data);	// 返回拿到的数据
-        })
-    })
-    ctx.body = data;
-}
-
 exports.wtf = async (ctx) =>{
     console.log(ctx.request.body)
     let id = ctx.request.body.id;
     let name = ctx.request.body.name;
     let time = ctx.request.body.time
-    
     let json = [id,name,time[0],time[1]]
     console.log(json)
     let data = await new Promise((resolve, reject)=>{
@@ -40,6 +20,18 @@ exports.wtf = async (ctx) =>{
             resolve(data);	// 返回拿到的数据
         }) 
         console.log(sqlLang)
+    })
+    ctx.body = data;
+}
+
+exports.delete = async(ctx)=>{
+    let id = ctx.request.body.id
+    let data = await new Promise((resolve,reject)=>{
+        let sql =  'delete from adminw where id = ? '
+        db.query(sql,id,(err,data)=>{
+            if(err) reject(err);
+            resolve(data);
+        })
     })
     ctx.body = data;
 }
